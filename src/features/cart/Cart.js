@@ -4,27 +4,33 @@ import {
   getCurrencySymbol,
 } from '../../utilities/utilities.js';
 
-// Import the changeItemQuantity() action creator.
+// Import the changeItemQuantity() action creator
+import { changeItemQuantity } from './cartSlice.js';
 
 export const Cart = (props) => {
   const { cart, currencyFilter, dispatch } = props;
 
   const onInputChangeHandler = (name, input) => {
-    // If the user enters a bad value...
+    // If the user enters an incorrect value...
     if (input === '') {
       return;
     }
 
-    // Otherwise, convert the input into a number and pass it along as the newQuantity.
+    // Otherwise, convert the input into a number and pass it along as the newQuantity
     const newQuantity = Number(input);
 
-    // Dispatch an action to change the quantity of the given name and quantity.
-
+    // Dispatch an action to change the quantity of the given name and quantity
+    dispatch(changeItemQuantity(name, newQuantity));
   };
 
-  // Use the cart and currencyFilter slices to render their data.
-  const cartElements = 'REPLACE_ME';
-  const total = 0;
+  // Use the cart and currencyFilter slices to render their data
+  const cartElements = Object.keys(cart).map(createCartItem);
+  /* Above line can also be coded like this:
+  const cartElements = [];
+  for (let itemName in cart) {
+    cartElements.push(createCartItem(itemName));
+  } */
+  const total = calculateTotal(cart, currencyFilter);
 
   return (
     <div id="cart-container">
